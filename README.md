@@ -7,6 +7,7 @@ Include the js file in the header or the footer of your page:
 ```<script src="jquery-textTweener.min.js"></script>```
 
 Then add a div with the containing textelements to the body of your page:
+
 ```<div id="texttween">
 <span class="text">This is a very long sample text with a lot of words to test the function of TextTweener.</span>
 <span class="text">The second text will then be created smoothly with the letters from the first text.</span>
@@ -15,6 +16,7 @@ Then add a div with the containing textelements to the body of your page:
 </div>```
 
 Finally, you start the Tweening Function by connecting TextTweener to the parent div:
+
 ```<script>
 $("#texttween").TextTweener({
 	duration: "5000"
