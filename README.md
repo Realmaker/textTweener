@@ -4,7 +4,7 @@ A jQuery Plugin to generate animation tweens between different texts
 With textTweener you can generate a text rotator to your page. The different texts fade nicely into each other by moving the letters to their new position. 
 
 Include the js file in the header or the footer of your page:
-<script src="jquery-textTweener.min.js"></script>
+<tt><script src="jquery-textTweener.min.js"></script></tt>
 
 Then add a div with the containing textelements to the body of your page:
 <div id="texttween">
