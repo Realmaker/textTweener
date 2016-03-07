@@ -30,3 +30,6 @@ $("#texttween").TextTweener({
 ```
 
 Duration is optional, standard is 5000ms.
+
+Example:
+(http://www.realmaker.de/texttweener/jquery-texttweener-example.html)
