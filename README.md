@@ -5,6 +5,9 @@ With textTweener you can generate a text rotator to your page. The different tex
 
 Only works for letters at the moment, no numbers or special characters. 
 
+Preview:
+![alt text](http://www.realmaker.de/texttweener/texttweener-demo.gif "TextTweener Preview")
+
 Include the js file in the header or the footer of your page:
 ```
 <script src="jquery-textTweener.min.js"></script>
