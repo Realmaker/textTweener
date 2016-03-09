@@ -1,5 +1,5 @@
 # textTweener
-A jQuery Plugin to generate animation tweens between different texts
+A jQuery Plugin to generate letter based animation tweens between different texts.
 
 With textTweener you can generate a text rotator to your page. The different texts fade nicely into each other by moving the letters to their new position. 
 
