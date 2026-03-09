@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+	<script src="jquery-textTweener.min.js"></script>
+	<style>
+	#texttween {
+		position: relative;
+		margin: 50px;
+		width: 500px;
+		height: 400px;
+	}
+		#texttween .text {
+			font-size: 40px;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+<div id="texttween">
+<span class="text">This is a very long sample text with a lot of words and some "1, 2, 3" numbers - to test the function of TextTweener!</span>
+<span class="text">The second text will then be created smoothly with the letters from the first text. Now width special "characters" like 1 2 3 : ? or _ !</span>
+<span class="text">And after that there is a third text to watch the transition again - width some special characters: ? 5 2 9 1 _ !</span>
+<span class="text">If you like, you can change the duration of one text by using the option duration.</span>
+</div>
+<script>
+
+$("#texttween").TextTweener({
+	duration: "4000"
+});
+
+</script>
+</body>
+</html>

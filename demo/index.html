@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TextTweener — Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0b;
+      --fg: #e8e6e3;
+      --fg-dim: #6b6966;
+      --accent: oklch(0.72 0.19 45);
+      --surface: #141416;
+      --border: #2a2a2d;
+      --radius: 8px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .header {
+      margin-bottom: 64px;
+    }
+
+    .header h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      margin-bottom: 16px;
+    }
+
+    .header h1 span {
+      color: var(--accent);
+    }
+
+    .header p {
+      color: var(--fg-dim);
+      font-size: 1.125rem;
+      max-width: 540px;
+    }
+
+    /* Demo container */
+    .demo-area {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px 40px;
+      margin-bottom: 32px;
+    }
+
+    #tweener {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: var(--fg);
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .controls button {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 200ms;
+    }
+
+    .controls button:hover {
+      border-color: var(--accent);
+    }
+
+    .controls button:active {
+      transform: scale(0.97);
+    }
+
+    .controls button.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Options panel */
+    .options {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 48px;
+    }
+
+    .options h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-dim);
+      margin-bottom: 20px;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .option label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--fg-dim);
+      margin-bottom: 6px;
+    }
+
+    .option input[type="range"] {
+      width: 100%;
+      accent-color: oklch(0.72 0.19 45);
+    }
+
+    .option .value {
+      font-size: 0.8rem;
+      color: var(--fg);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .align-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .align-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--fg-dim);
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 200ms, color 200ms;
+    }
+
+    .align-btn:hover {
+      border-color: var(--fg-dim);
+    }
+
+    .align-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Code example */
+    .code-section {
+      margin-bottom: 48px;
+    }
+
+    .code-section h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-dim);
+      margin-bottom: 12px;
+    }
+
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--fg);
+    }
+
+    code .kw { color: oklch(0.75 0.15 280); }
+    code .str { color: oklch(0.72 0.19 45); }
+    code .num { color: oklch(0.75 0.18 140); }
+    code .cm { color: var(--fg-dim); }
+
+    /* Event log */
+    .event-log {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--fg-dim);
+    }
+
+    .event-log h3 {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-dim);
+      margin-bottom: 12px;
+    }
+
+    .event-log .entry {
+      border-bottom: 1px solid var(--border);
+      padding: 2px 0;
+    }
+
+    .event-log .entry .time {
+      color: var(--fg-dim);
+    }
+
+    .event-log .entry .event-name {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <h1>Text<span>Tweener</span></h1>
+      <p>Animate text transitions by morphing individual letters to their new positions. Zero dependencies, GPU-accelerated, accessible.</p>
+    </header>
+
+    <div class="demo-area">
+      <div id="tweener">
+        <span class="text">Über 30 Sonderzeichen: Klammern (rund), [eckig] & {geschweifte} — alles möglich!</span>
+        <span class="text">Preise: ab 9,99 € pro Monat. Fragen? E-Mail an info@example.de schreiben!</span>
+        <span class="text">Mathematik: 2 + 2 = 4, aber 100% der Lösung liegt im Detail... #nerdig</span>
+        <span class="text">Sprüche & Zitate: "Wer nicht wagt, der nicht gewinnt" — Omas Weisheit für's Leben.</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="btn-play">Play</button>
+      <button id="btn-pause">Pause</button>
+      <button id="btn-prev">Prev</button>
+      <button id="btn-next">Next</button>
+      <button id="btn-destroy">Destroy</button>
+      <button id="btn-reinit">Re-init</button>
+    </div>
+
+    <div class="options">
+      <h3>Options</h3>
+      <div class="option-grid">
+        <div class="option">
+          <label>Display Duration: <span class="value" id="val-duration">4000ms</span></label>
+          <input type="range" id="opt-duration" min="1000" max="10000" step="500" value="4000">
+        </div>
+        <div class="option">
+          <label>Transition Duration: <span class="value" id="val-transition">800ms</span></label>
+          <input type="range" id="opt-transition" min="200" max="3000" step="100" value="800">
+        </div>
+        <div class="option">
+          <label>Stagger: <span class="value" id="val-stagger">15ms</span></label>
+          <input type="range" id="opt-stagger" min="0" max="80" step="5" value="15">
+        </div>
+        <div class="option">
+          <label>Text Align</label>
+          <div class="align-buttons">
+            <button class="align-btn active" data-align="left">Left</button>
+            <button class="align-btn" data-align="center">Center</button>
+            <button class="align-btn" data-align="right">Right</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-section">
+      <h3>This Demo's Code</h3>
+      <pre><code><span class="kw">import</span> { TextTweener } <span class="kw">from</span> <span class="str">'texttweener'</span>;
+
+<span class="kw">const</span> tt = <span class="kw">new</span> TextTweener(<span class="str">'#tweener'</span>, {
+  duration: <span class="num">4000</span>,
+  transitionDuration: <span class="num">800</span>,
+  stagger: <span class="num">15</span>,
+  easing: <span class="str">'cubic-bezier(0.16, 1, 0.3, 1)'</span>,
+  textAlign: <span class="str">'left'</span>,
+  texts: [
+    <span class="str">'Über 30 Sonderzeichen: Klammern (rund), [eckig] & {geschweifte} — alles möglich!'</span>,
+    <span class="str">'Preise: ab 9,99 € pro Monat. Fragen? E-Mail an info@example.de schreiben!'</span>,
+    <span class="str">'Mathematik: 2 + 2 = 4, aber 100% der Lösung liegt im Detail... #nerdig'</span>,
+    <span class="str">'Sprüche & Zitate: "Wer nicht wagt, der nicht gewinnt" — Omas Weisheit für\'s Leben.'</span>,
+  ],
+});
+
+<span class="cm">// API</span>
+tt.play();                    <span class="cm">// Start playback</span>
+tt.pause();                   <span class="cm">// Pause</span>
+tt.next();                    <span class="cm">// Next text (returns Promise)</span>
+tt.prev();                    <span class="cm">// Previous text</span>
+tt.goTo(<span class="num">2</span>);                   <span class="cm">// Jump to index</span>
+tt.destroy();                 <span class="cm">// Clean up</span>
+
+<span class="cm">// Events</span>
+tt.on(<span class="str">'beforeTransition'</span>, (from, to) => {
+  console.log(<span class="str">`Transitioning ${from} → ${to}`</span>);
+});
+
+tt.on(<span class="str">'change'</span>, (index) => {
+  console.log(<span class="str">`Now showing text ${index}`</span>);
+});</code></pre>
+    </div>
+
+    <div class="event-log" id="event-log">
+      <h3>Event Log</h3>
+    </div>
+  </div>
+
+  <script type="module">
+    import { TextTweener } from '../dist/index.mjs';
+
+    let tt;
+    let currentAlign = 'left';
+
+    function logEvent(name, detail = '') {
+      const log = document.getElementById('event-log');
+      const entry = document.createElement('div');
+      entry.className = 'entry';
+      const time = new Date().toLocaleTimeString('de-DE', { hour12: false });
+      entry.innerHTML = `<span class="time">${time}</span> <span class="event-name">${name}</span> ${detail}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function initTweener() {
+      const duration = parseInt(document.getElementById('opt-duration').value);
+      const transitionDuration = parseInt(document.getElementById('opt-transition').value);
+      const stagger = parseInt(document.getElementById('opt-stagger').value);
+
+      tt = new TextTweener('#tweener', {
+        duration,
+        transitionDuration,
+        stagger,
+        textAlign: currentAlign,
+        texts: [
+          'Über 30 Sonderzeichen: Klammern (rund), [eckig] & {geschweifte} — alles möglich!',
+          'Preise: ab 9,99 € pro Monat. Fragen? E-Mail an info@example.de schreiben!',
+          'Mathematik: 2 + 2 = 4, aber 100% der Lösung liegt im Detail... #nerdig',
+          'Sprüche & Zitate: "Wer nicht wagt, der nicht gewinnt" — Omas Weisheit für\'s Leben.',
+        ],
+      });
+
+      tt.on('ready', () => logEvent('ready'));
+      tt.on('beforeTransition', (from, to) => logEvent('beforeTransition', `${from} → ${to}`));
+      tt.on('afterTransition', (from, to) => logEvent('afterTransition', `${from} → ${to}`));
+      tt.on('change', (idx) => logEvent('change', `index: ${idx}`));
+      tt.on('pause', () => logEvent('pause'));
+      tt.on('resume', () => logEvent('resume'));
+      tt.on('destroy', () => logEvent('destroy'));
+    }
+
+    initTweener();
+
+    // Controls
+    document.getElementById('btn-play').addEventListener('click', () => tt?.play());
+    document.getElementById('btn-pause').addEventListener('click', () => tt?.pause());
+    document.getElementById('btn-prev').addEventListener('click', () => tt?.prev());
+    document.getElementById('btn-next').addEventListener('click', () => tt?.next());
+    document.getElementById('btn-destroy').addEventListener('click', () => tt?.destroy());
+    document.getElementById('btn-reinit').addEventListener('click', () => {
+      tt?.destroy();
+      document.getElementById('tweener').innerHTML = '';
+      initTweener();
+    });
+
+    // Option sliders
+    for (const [id, valId] of [['opt-duration', 'val-duration'], ['opt-transition', 'val-transition'], ['opt-stagger', 'val-stagger']]) {
+      document.getElementById(id).addEventListener('input', (e) => {
+        document.getElementById(valId).textContent = e.target.value + 'ms';
+      });
+    }
+
+    // Align buttons
+    document.querySelectorAll('.align-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentAlign = btn.dataset.align;
+        // Re-init with new alignment
+        tt?.destroy();
+        document.getElementById('tweener').innerHTML = '';
+        initTweener();
+      });
+    });
+  </script>
+</body>
+</html>
