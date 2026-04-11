@@ -6,6 +6,10 @@ Animate text transitions by morphing individual letters to their new positions. 
 
 Available as **npm package**, **WordPress Gutenberg Block**, and **After Effects Script**.
 
+## Live Demo
+
+See it in action → **[realmaker.de/texttweener](https://realmaker.de/texttweener/)**
+
 ## Install
 
 ```bash
